@@ -1,8 +1,18 @@
 import { useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { Heart, Menu, X, MessageCircleHeart, Pill, Droplet, Siren, ShieldCheck, UserRound } from "lucide-react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Heart, Menu, X, MessageCircleHeart, Pill, Droplet, Siren, ShieldCheck, UserRound, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { toast } from "@/hooks/use-toast";
 
 const NAV = [
   { to: "/chat", label: "Chat", icon: MessageCircleHeart },
@@ -15,6 +25,19 @@ const NAV = [
 export const Header = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast({ title: "Signed out" });
+    navigate("/");
+  };
+
+  const initials = (user?.user_metadata?.display_name || user?.email || "U")
+    .split(/[\s@]+/)[0]
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
@@ -50,15 +73,46 @@ export const Header = () => {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
-          <Button asChild variant="ghost" size="sm" className="rounded-full">
-            <Link to="/auth">
-              <UserRound className="h-4 w-4" />
-              Sign in
-            </Link>
-          </Button>
-          <Button asChild size="sm" className="rounded-full bg-gradient-primary text-primary-foreground hover:opacity-95">
-            <Link to="/auth?mode=signup">Get started</Link>
-          </Button>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="flex items-center gap-2 rounded-full border border-border/60 bg-card px-2 py-1.5 text-sm font-medium hover:bg-muted"
+                  aria-label="Account menu"
+                >
+                  <span className="grid h-7 w-7 place-items-center rounded-full bg-gradient-primary text-xs font-semibold text-primary-foreground">
+                    {initials}
+                  </span>
+                  <span className="pr-1.5 text-foreground/85">
+                    {user.user_metadata?.display_name || user.email?.split("@")[0]}
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="text-sm font-medium">{user.user_metadata?.display_name || "Signed in"}</div>
+                  <div className="text-xs text-muted-foreground">{user.email}</div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm" className="rounded-full">
+                <Link to="/auth">
+                  <UserRound className="h-4 w-4" />
+                  Sign in
+                </Link>
+              </Button>
+              <Button asChild size="sm" className="rounded-full bg-gradient-primary text-primary-foreground hover:opacity-95">
+                <Link to="/auth?mode=signup">Get started</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         <button
@@ -93,16 +147,32 @@ export const Header = () => {
               );
             })}
             <div className="mt-2 flex gap-2 pt-2">
-              <Button asChild variant="outline" className="flex-1 rounded-full" onClick={() => setOpen(false)}>
-                <Link to="/auth">Sign in</Link>
-              </Button>
-              <Button
-                asChild
-                className="flex-1 rounded-full bg-gradient-primary text-primary-foreground"
-                onClick={() => setOpen(false)}
-              >
-                <Link to="/auth?mode=signup">Get started</Link>
-              </Button>
+              {user ? (
+                <Button
+                  variant="outline"
+                  className="flex-1 rounded-full"
+                  onClick={() => {
+                    setOpen(false);
+                    handleSignOut();
+                  }}
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign out
+                </Button>
+              ) : (
+                <>
+                  <Button asChild variant="outline" className="flex-1 rounded-full" onClick={() => setOpen(false)}>
+                    <Link to="/auth">Sign in</Link>
+                  </Button>
+                  <Button
+                    asChild
+                    className="flex-1 rounded-full bg-gradient-primary text-primary-foreground"
+                    onClick={() => setOpen(false)}
+                  >
+                    <Link to="/auth?mode=signup">Get started</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </nav>
         </div>
