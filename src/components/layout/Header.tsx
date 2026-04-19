@@ -1,0 +1,112 @@
+import { useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { Heart, Menu, X, MessageCircleHeart, Pill, Droplet, Siren, ShieldCheck, UserRound } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+
+const NAV = [
+  { to: "/chat", label: "Chat", icon: MessageCircleHeart },
+  { to: "/reminders", label: "Reminders", icon: Pill },
+  { to: "/donors", label: "Donors", icon: Droplet },
+  { to: "/sos", label: "SOS", icon: Siren },
+  { to: "/vault", label: "Vault", icon: ShieldCheck },
+];
+
+export const Header = () => {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  return (
+    <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/85 backdrop-blur-md">
+      <div className="container flex h-16 items-center justify-between gap-4">
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-lg font-semibold tracking-tight"
+          onClick={() => setOpen(false)}
+        >
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
+            <Heart className="h-5 w-5" strokeWidth={2.5} />
+          </span>
+          <span className="font-display text-xl">Aidly</span>
+        </Link>
+
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+          {NAV.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                cn(
+                  "inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-medium transition-base",
+                  "text-muted-foreground hover:bg-primary-soft hover:text-primary",
+                  isActive && "bg-primary-soft text-primary",
+                )
+              }
+            >
+              <item.icon className="h-4 w-4" />
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="hidden items-center gap-2 md:flex">
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link to="/auth">
+              <UserRound className="h-4 w-4" />
+              Sign in
+            </Link>
+          </Button>
+          <Button asChild size="sm" className="rounded-full bg-gradient-primary text-primary-foreground hover:opacity-95">
+            <Link to="/auth?mode=signup">Get started</Link>
+          </Button>
+        </div>
+
+        <button
+          className="grid h-10 w-10 place-items-center rounded-full hover:bg-muted md:hidden"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+        >
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      {open && (
+        <div className="border-t border-border/60 bg-background md:hidden">
+          <nav className="container flex flex-col gap-1 py-3" aria-label="Mobile">
+            {NAV.map((item) => {
+              const isActive = location.pathname.startsWith(item.to);
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "flex items-center gap-3 rounded-xl px-3 py-3 text-base font-medium transition-base",
+                    "text-foreground/80 hover:bg-muted",
+                    isActive && "bg-primary-soft text-primary",
+                  )}
+                >
+                  <item.icon className="h-5 w-5" />
+                  {item.label}
+                </Link>
+              );
+            })}
+            <div className="mt-2 flex gap-2 pt-2">
+              <Button asChild variant="outline" className="flex-1 rounded-full" onClick={() => setOpen(false)}>
+                <Link to="/auth">Sign in</Link>
+              </Button>
+              <Button
+                asChild
+                className="flex-1 rounded-full bg-gradient-primary text-primary-foreground"
+                onClick={() => setOpen(false)}
+              >
+                <Link to="/auth?mode=signup">Get started</Link>
+              </Button>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
+  );
+};
