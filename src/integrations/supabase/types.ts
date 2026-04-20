@@ -14,6 +14,143 @@ export type Database = {
   }
   public: {
     Tables: {
+      blood_requests: {
+        Row: {
+          blood_group: Database["public"]["Enums"]["blood_group"]
+          city: string
+          contact_preference: string
+          created_at: string
+          hospital: string
+          id: string
+          latitude: number | null
+          longitude: number | null
+          note: string | null
+          requester_id: string
+          status: Database["public"]["Enums"]["request_status"]
+          units: number
+          updated_at: string
+          urgency: Database["public"]["Enums"]["urgency_level"]
+        }
+        Insert: {
+          blood_group: Database["public"]["Enums"]["blood_group"]
+          city: string
+          contact_preference?: string
+          created_at?: string
+          hospital: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          note?: string | null
+          requester_id: string
+          status?: Database["public"]["Enums"]["request_status"]
+          units?: number
+          updated_at?: string
+          urgency?: Database["public"]["Enums"]["urgency_level"]
+        }
+        Update: {
+          blood_group?: Database["public"]["Enums"]["blood_group"]
+          city?: string
+          contact_preference?: string
+          created_at?: string
+          hospital?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          note?: string | null
+          requester_id?: string
+          status?: Database["public"]["Enums"]["request_status"]
+          units?: number
+          updated_at?: string
+          urgency?: Database["public"]["Enums"]["urgency_level"]
+        }
+        Relationships: []
+      }
+      donor_contact_requests: {
+        Row: {
+          created_at: string
+          donor_user_id: string
+          id: string
+          message: string | null
+          request_id: string
+          requester_id: string
+          responded_at: string | null
+          status: Database["public"]["Enums"]["contact_request_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          donor_user_id: string
+          id?: string
+          message?: string | null
+          request_id: string
+          requester_id: string
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["contact_request_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          donor_user_id?: string
+          id?: string
+          message?: string | null
+          request_id?: string
+          requester_id?: string
+          responded_at?: string | null
+          status?: Database["public"]["Enums"]["contact_request_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "donor_contact_requests_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "blood_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      donors: {
+        Row: {
+          blood_group: Database["public"]["Enums"]["blood_group"]
+          city: string
+          created_at: string
+          id: string
+          last_donation_date: string | null
+          latitude: number
+          longitude: number
+          note: string | null
+          updated_at: string
+          user_id: string
+          visible: boolean
+        }
+        Insert: {
+          blood_group: Database["public"]["Enums"]["blood_group"]
+          city: string
+          created_at?: string
+          id?: string
+          last_donation_date?: string | null
+          latitude: number
+          longitude: number
+          note?: string | null
+          updated_at?: string
+          user_id: string
+          visible?: boolean
+        }
+        Update: {
+          blood_group?: Database["public"]["Enums"]["blood_group"]
+          city?: string
+          created_at?: string
+          id?: string
+          last_donation_date?: string | null
+          latitude?: number
+          longitude?: number
+          note?: string | null
+          updated_at?: string
+          user_id?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       medication_doses: {
         Row: {
           action_at: string | null
@@ -168,6 +305,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      donors_within_radius: {
+        Args: {
+          _blood_group: Database["public"]["Enums"]["blood_group"]
+          _lat: number
+          _lng: number
+          _radius_km?: number
+        }
+        Returns: {
+          blood_group: Database["public"]["Enums"]["blood_group"]
+          city: string
+          distance_km: number
+          donor_id: string
+          last_donation_date: string
+          latitude: number
+          longitude: number
+          note: string
+          user_id: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -189,7 +345,11 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      blood_group: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-"
+      contact_request_status: "pending" | "accepted" | "declined" | "cancelled"
       dose_status: "pending" | "taken" | "skipped" | "missed"
+      request_status: "open" | "fulfilled" | "cancelled"
+      urgency_level: "low" | "normal" | "high" | "critical"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -318,7 +478,11 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      blood_group: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+      contact_request_status: ["pending", "accepted", "declined", "cancelled"],
       dose_status: ["pending", "taken", "skipped", "missed"],
+      request_status: ["open", "fulfilled", "cancelled"],
+      urgency_level: ["low", "normal", "high", "critical"],
     },
   },
 } as const
