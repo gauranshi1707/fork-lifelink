@@ -300,6 +300,45 @@ export type Database = {
         }
         Relationships: []
       }
+      vault_documents: {
+        Row: {
+          category: Database["public"]["Enums"]["vault_category"]
+          content_type: string | null
+          created_at: string
+          file_size: number | null
+          id: string
+          name: string
+          notes: string | null
+          storage_path: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["vault_category"]
+          content_type?: string | null
+          created_at?: string
+          file_size?: number | null
+          id?: string
+          name: string
+          notes?: string | null
+          storage_path: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["vault_category"]
+          content_type?: string | null
+          created_at?: string
+          file_size?: number | null
+          id?: string
+          name?: string
+          notes?: string | null
+          storage_path?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -359,6 +398,12 @@ export type Database = {
       dose_status: "pending" | "taken" | "skipped" | "missed"
       request_status: "open" | "fulfilled" | "cancelled"
       urgency_level: "low" | "normal" | "high" | "critical"
+      vault_category:
+        | "prescription"
+        | "lab_report"
+        | "scan"
+        | "insurance"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -492,6 +537,13 @@ export const Constants = {
       dose_status: ["pending", "taken", "skipped", "missed"],
       request_status: ["open", "fulfilled", "cancelled"],
       urgency_level: ["low", "normal", "high", "critical"],
+      vault_category: [
+        "prescription",
+        "lab_report",
+        "scan",
+        "insurance",
+        "other",
+      ],
     },
   },
 } as const
