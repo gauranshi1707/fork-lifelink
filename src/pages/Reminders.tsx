@@ -63,6 +63,7 @@ const STATUS_LABEL: Record<DoseStatus, string> = {
 
 const Reminders = () => {
   const { user, loading: authLoading } = useAuth();
+  const notifications = useNotifications();
   const [meds, setMeds] = useState<Medication[]>([]);
   const [doses, setDoses] = useState<DoseWithMed[]>([]);
   const [adherence, setAdherence] = useState<AdherenceStats | null>(null);
@@ -88,6 +89,19 @@ const Reminders = () => {
       .catch((e) => toast({ title: "Couldn't load reminders", description: e.message, variant: "destructive" }))
       .finally(() => setLoading(false));
   }, [user, authLoading]);
+
+  // Schedule browser notifications for pending doses whenever the list changes.
+  useEffect(() => {
+    if (notifications.permission !== "granted" || doses.length === 0) return;
+    const cleanup = scheduleDoseNotifications(doses, {
+      notify: notifications.notify,
+      onFire: () => {
+        // Re-fetch so the dose appears in the right state if user acted via OS UI.
+        if (user) fetchTodayDoses(user.id).then(setDoses).catch(() => {});
+      },
+    });
+    return cleanup;
+  }, [doses, notifications.permission, notifications.notify, user]);
 
   const handleStatus = async (doseId: string, status: DoseStatus) => {
     const prev = doses;
