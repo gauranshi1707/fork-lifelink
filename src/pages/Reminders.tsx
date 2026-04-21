@@ -179,6 +179,26 @@ const Reminders = () => {
         </Dialog>
       </header>
 
+      <NotificationBanner
+        permission={notifications.permission}
+        supported={notifications.supported}
+        onEnable={async () => {
+          const result = await notifications.request();
+          if (result === "granted") {
+            notifications.notify("Reminders enabled", {
+              body: "We'll nudge you when each dose is due.",
+            });
+            toast({ title: "Notifications enabled" });
+          } else if (result === "denied") {
+            toast({
+              title: "Notifications blocked",
+              description: "Enable them in your browser site settings to get dose nudges.",
+              variant: "destructive",
+            });
+          }
+        }}
+      />
+
       {loading ? (
         <div className="mt-12 grid place-items-center text-muted-foreground">
           <Loader2 className="h-6 w-6 animate-spin" />
