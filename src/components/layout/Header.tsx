@@ -50,7 +50,7 @@ export const Header = () => {
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
             <Heart className="h-5 w-5" strokeWidth={2.5} />
           </span>
-          <span className="font-display text-xl">Aidly</span>
+          <span className="font-display text-xl">LifeLink</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main">

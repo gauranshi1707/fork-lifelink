@@ -67,7 +67,7 @@ export const MessageBubble = ({ message, isStreaming }: Props) => {
 };
 
 const TypingDots = () => (
-  <span className="inline-flex items-center gap-1 py-1" aria-label="Aidly is typing">
+  <span className="inline-flex items-center gap-1 py-1" aria-label="LifeLink is typing">
     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]" />
     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:-0.15s]" />
     <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" />

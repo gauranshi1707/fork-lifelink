@@ -10,7 +10,7 @@ export const Footer = () => {
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-primary text-primary-foreground">
               <Heart className="h-4 w-4" strokeWidth={2.5} />
             </span>
-            <span className="font-display text-lg">Aidly</span>
+            <span className="font-display text-lg">LifeLink</span>
           </Link>
           <p className="mt-3 text-sm text-muted-foreground">
             Community-first tools for mental health, medication, donors, emergencies, and your private health records.
@@ -71,7 +71,7 @@ export const Footer = () => {
         </div>
       </div>
       <div className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
-        Aidly is not a medical service. In an emergency, always call your local emergency number.
+        LifeLink is not a medical service. In an emergency, always call your local emergency number.
       </div>
     </footer>
   );

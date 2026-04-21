@@ -91,7 +91,7 @@ const Index = () => {
               <br className="hidden sm:block" /> when life feels far.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-              Aidly brings together anonymous mental health support, medicine reminders, a community blood donor
+              LifeLink brings together anonymous mental health support, medicine reminders, a community blood donor
               network, emergency SOS, and a private health vault — all built for accessibility and real-time help.
             </p>
 

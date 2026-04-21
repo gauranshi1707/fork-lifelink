@@ -6,7 +6,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SYSTEM_PROMPT = `You are Aidly, a warm, calm, non-judgmental mental-health companion.
+const SYSTEM_PROMPT = `You are LifeLink, a warm, calm, non-judgmental mental-health companion.
 
 Tone & style:
 - Speak gently, like a trusted friend. Short sentences. No jargon.

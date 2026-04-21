@@ -7,8 +7,8 @@ import { CrisisSupportPanel } from "@/components/chat/CrisisSupportPanel";
 import { MessageBubble, type ChatMessage } from "@/components/chat/MessageBubble";
 import { detectCrisis } from "@/lib/crisisDetection";
 
-const STORAGE_KEY = "aidly:chat:v1";
-const CRISIS_KEY = "aidly:chat:crisis:v1";
+const STORAGE_KEY = "lifelink:chat:v1";
+const CRISIS_KEY = "lifelink:chat:crisis:v1";
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mental-health-chat`;
 const PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
@@ -246,7 +246,7 @@ const Chat = () => {
             A safe space to talk
           </h1>
           <p className="mt-2 max-w-xl text-muted-foreground">
-            Share what's on your mind. Aidly listens without judgment, and surfaces crisis support instantly when you
+            Share what's on your mind. LifeLink listens without judgment, and surfaces crisis support instantly when you
             need it.
           </p>
         </div>
@@ -280,7 +280,7 @@ const Chat = () => {
         <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
         <p>
           This conversation lives <strong>only on your device</strong> and is sent to an AI companion to generate
-          replies. Aidly is not a therapist or doctor. In an emergency, please call your local emergency number.
+          replies. LifeLink is not a therapist or doctor. In an emergency, please call your local emergency number.
         </p>
       </div>
 
@@ -336,7 +336,7 @@ const EmptyState = ({ onPick, disabled }: { onPick: (t: string) => void; disable
     <span className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow">
       <Heart className="h-7 w-7" strokeWidth={2.25} />
     </span>
-    <h2 className="mt-4 font-display text-xl font-semibold">Hi, I'm Aidly.</h2>
+    <h2 className="mt-4 font-display text-xl font-semibold">Hi, I'm LifeLink.</h2>
     <p className="mt-1 max-w-md text-sm text-muted-foreground">
       I'm here to listen. Whatever you're carrying, you don't have to carry it alone.
     </p>

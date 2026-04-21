@@ -49,7 +49,7 @@ const Auth = () => {
     setParams(newParams, { replace: true });
   };
 
-  const heading = mode === "signup" ? "Create your Aidly account" : "Welcome back";
+  const heading = mode === "signup" ? "Create your LifeLink account" : "Welcome back";
   const subheading = useMemo(
     () =>
       mode === "signup"
@@ -155,7 +155,7 @@ const Auth = () => {
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/20 backdrop-blur">
               <Heart className="h-5 w-5" strokeWidth={2.5} />
             </span>
-            <span className="font-display text-2xl">Aidly</span>
+            <span className="font-display text-2xl">LifeLink</span>
           </Link>
           <div className="mt-auto space-y-6">
             <h2 className="font-display text-4xl leading-tight">
@@ -189,7 +189,7 @@ const Auth = () => {
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-primary text-primary-foreground">
               <Heart className="h-5 w-5" strokeWidth={2.5} />
             </span>
-            <span className="font-display text-2xl">Aidly</span>
+            <span className="font-display text-2xl">LifeLink</span>
           </div>
 
           <h1 className="font-display text-3xl tracking-tight">{heading}</h1>
@@ -306,12 +306,12 @@ const Auth = () => {
           </form>
 
           <p className="mt-6 text-center text-xs text-muted-foreground">
-            By continuing you agree to use Aidly responsibly. Aidly does not replace professional medical care.
+            By continuing you agree to use LifeLink responsibly. LifeLink does not replace professional medical care.
           </p>
         </div>
 
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          {mode === "signup" ? "Already have an account?" : "New to Aidly?"}{" "}
+          {mode === "signup" ? "Already have an account?" : "New to LifeLink?"}{" "}
           <button
             type="button"
             onClick={() => switchMode(mode === "signup" ? "signin" : "signup")}
