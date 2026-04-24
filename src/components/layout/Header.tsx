@@ -4,6 +4,7 @@ import { Heart, Menu, X, MessageCircleHeart, Pill, Droplet, Siren, ShieldCheck, 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { PointsBadge } from "@/components/PointsBadge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,6 +74,7 @@ export const Header = () => {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
+          {user && <PointsBadge />}
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

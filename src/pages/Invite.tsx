@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Users, Link as LinkIcon, Copy, Share2, CheckCircle2, Clock, Sparkles, Loader2 } from "lucide-react";
+import { Users, Link as LinkIcon, Copy, Share2, CheckCircle2, Clock, Sparkles, Loader2, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useReferralStats } from "@/hooks/useReferralStats";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +32,7 @@ type ReferredProfile = {
 
 const Invite = () => {
   const { user, loading: authLoading } = useAuth();
+  const { stats: referralStats, loading: statsLoading } = useReferralStats();
   const [code, setCode] = useState<string | null>(null);
   const [referrals, setReferrals] = useState<ReferralRow[]>([]);
   const [profilesMap, setProfilesMap] = useState<Record<string, ReferredProfile>>({});
@@ -139,10 +141,11 @@ const Invite = () => {
       </div>
 
       {/* Stats */}
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+      <div className="mt-6 grid gap-4 sm:grid-cols-4">
         <StatCard icon={Users} label="Total Invites" value={stats.total} tone="primary" />
         <StatCard icon={CheckCircle2} label="Active Referrals" value={stats.completed} tone="success" />
         <StatCard icon={Clock} label="Pending Verifications" value={stats.pending} tone="warning" />
+        <StatCard icon={Zap} label="Points Earned" value={referralStats?.pointsEarned ?? 0} tone="primary" />
       </div>
 
       {/* Sharing */}
@@ -178,6 +181,15 @@ const Invite = () => {
               Or share your code: <span className="font-mono font-semibold text-foreground">{code}</span>
             </p>
           )}
+          <div className="rounded-lg bg-blue-50 p-3 text-sm text-blue-900 dark:bg-blue-950 dark:text-blue-100">
+            <div className="flex items-start gap-2">
+              <Zap className="h-4 w-4 mt-0.5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+              <div>
+                <p className="font-medium">Earn points with each referral!</p>
+                <p className="text-xs mt-1">You earn <strong>10 points</strong> for each successful referral. They earn <strong>5 bonus points</strong> when they sign up.</p>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 

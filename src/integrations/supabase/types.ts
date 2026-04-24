@@ -312,6 +312,39 @@ export type Database = {
         }
         Relationships: []
       }
+      user_points: {
+        Row: {
+          balance: number
+          created_at: string
+          id: string
+          points_earned: number
+          points_redeemed: number
+          referral_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          id?: string
+          points_earned?: number
+          points_redeemed?: number
+          referral_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          id?: string
+          points_earned?: number
+          points_redeemed?: number
+          referral_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -407,6 +440,16 @@ export type Database = {
           phone: string
         }[]
       }
+      get_user_referral_stats: {
+        Args: { _user_id: string }
+        Returns: {
+          total_referrals: number
+          points_balance: number
+          points_earned: number
+          referral_code: string
+          referred_user_count: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -424,6 +467,22 @@ export type Database = {
           scheduled_at: string
           user_id: string
         }[]
+      }
+      track_referral_with_points: {
+        Args: { _referrer_code: string; _referred_user_id: string }
+        Returns: {
+          referral_id: string
+          referrer_id: string
+          success: boolean
+        }[]
+      }
+      award_referrer_points: {
+        Args: { _referrer_id: string }
+        Returns: boolean
+      }
+      award_referred_user_points: {
+        Args: { _referred_user_id: string }
+        Returns: boolean
       }
     }
     Enums: {
