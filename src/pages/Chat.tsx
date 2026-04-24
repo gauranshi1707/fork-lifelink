@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Send, Sparkles, RotateCcw, ShieldAlert, Heart, Info } from "lucide-react";
+import { Send, Sparkles, RotateCcw, AlertTriangle, Stethoscope, Info } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,10 +13,10 @@ const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/mental-healt
 const PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 const STARTER_PROMPTS = [
-  "I've been feeling really anxious lately.",
-  "I'm overwhelmed and don't know where to start.",
-  "I'm having a hard day. Can we talk?",
-  "I just need someone to listen.",
+  "I have a headache that won't go away.",
+  "I've been feeling nauseous and dizzy.",
+  "My throat is sore and I have a fever.",
+  "I have stomach pain after eating.",
 ];
 
 const newId = () =>
@@ -240,14 +240,13 @@ const Chat = () => {
         <div>
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
             <Sparkles className="h-3.5 w-3.5" />
-            Anonymous · No sign-up
+            AI-Powered · Anonymous
           </span>
           <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-            A safe space to talk
+            Symptom Checker
           </h1>
           <p className="mt-2 max-w-xl text-muted-foreground">
-            Share what's on your mind. LifeLink listens without judgment, and surfaces crisis support instantly when you
-            need it.
+            Describe your symptoms and get guidance on possible conditions, severity levels, and recommended next steps.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -258,8 +257,8 @@ const Chat = () => {
             onClick={() => setCrisisVisible((v) => !v)}
             aria-pressed={crisisVisible}
           >
-            <ShieldAlert className="h-4 w-4" />
-            {crisisVisible ? "Hide" : "Crisis"} helplines
+            <AlertTriangle className="h-4 w-4" />
+            {crisisVisible ? "Hide" : "Show"} emergency info
           </Button>
           {hasConversation && (
             <Button variant="ghost" size="sm" className="rounded-full" onClick={clearConversation}>
@@ -279,8 +278,8 @@ const Chat = () => {
       <div className="mt-4 flex items-start gap-2 rounded-xl border border-border/60 bg-muted/40 p-3 text-xs text-muted-foreground">
         <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
         <p>
-          This conversation lives <strong>only on your device</strong> and is sent to an AI companion to generate
-          replies. LifeLink is not a therapist or doctor. In an emergency, please call your local emergency number.
+          This is <strong>not a medical diagnosis</strong>. The symptom checker provides general guidance only.
+          Always consult a qualified healthcare professional. In an emergency, call your local emergency number immediately.
         </p>
       </div>
 
@@ -311,7 +310,7 @@ const Chat = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Share what's on your mind…"
+            placeholder="Describe your symptoms…"
             rows={1}
             disabled={isStreaming}
             className="min-h-[44px] max-h-[180px] resize-none border-0 bg-transparent text-[15px] focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -334,11 +333,11 @@ const Chat = () => {
 const EmptyState = ({ onPick, disabled }: { onPick: (t: string) => void; disabled: boolean }) => (
   <div className="flex h-full flex-col items-center justify-center py-10 text-center">
     <span className="grid h-14 w-14 place-items-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow">
-      <Heart className="h-7 w-7" strokeWidth={2.25} />
+      <Stethoscope className="h-7 w-7" strokeWidth={2.25} />
     </span>
-    <h2 className="mt-4 font-display text-xl font-semibold">Hi, I'm LifeLink.</h2>
+    <h2 className="mt-4 font-display text-xl font-semibold">Symptom Checker</h2>
     <p className="mt-1 max-w-md text-sm text-muted-foreground">
-      I'm here to listen. Whatever you're carrying, you don't have to carry it alone.
+      Describe your symptoms to get possible conditions, severity assessment, and recommended actions.
     </p>
 
     <div className="mt-6 grid w-full max-w-lg gap-2 sm:grid-cols-2">

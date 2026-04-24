@@ -1,57 +1,19 @@
-import { Phone, ExternalLink, ShieldAlert, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Phone, AlertTriangle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export interface Helpline {
+export interface EmergencyContact {
   region: string;
-  name: string;
-  phone: string;
-  href?: string;
-  hours?: string;
+  number: string;
+  href: string;
 }
 
-const HELPLINES: Helpline[] = [
-  {
-    region: "United States",
-    name: "988 Suicide & Crisis Lifeline",
-    phone: "988",
-    href: "tel:988",
-    hours: "24/7",
-  },
-  {
-    region: "United Kingdom & Ireland",
-    name: "Samaritans",
-    phone: "116 123",
-    href: "tel:116123",
-    hours: "24/7, free",
-  },
-  {
-    region: "India",
-    name: "iCall Psychosocial Helpline",
-    phone: "9152987821",
-    href: "tel:+919152987821",
-    hours: "Mon–Sat, 8am–10pm",
-  },
-  {
-    region: "Canada",
-    name: "Talk Suicide Canada",
-    phone: "1-833-456-4566",
-    href: "tel:18334564566",
-    hours: "24/7",
-  },
-  {
-    region: "Australia",
-    name: "Lifeline",
-    phone: "13 11 14",
-    href: "tel:131114",
-    hours: "24/7",
-  },
-  {
-    region: "International directory",
-    name: "Find A Helpline",
-    phone: "findahelpline.com",
-    href: "https://findahelpline.com",
-  },
+const EMERGENCY_NUMBERS: EmergencyContact[] = [
+  { region: "United States", number: "911", href: "tel:911" },
+  { region: "European Union", number: "112", href: "tel:112" },
+  { region: "United Kingdom", number: "999", href: "tel:999" },
+  { region: "India", number: "112", href: "tel:112" },
+  { region: "Australia", number: "000", href: "tel:000" },
+  { region: "Canada", number: "911", href: "tel:911" },
 ];
 
 interface Props {
@@ -67,71 +29,70 @@ export const CrisisSupportPanel = ({ visible, onDismiss }: Props) => {
       role="alert"
       aria-live="assertive"
       className={cn(
-        "relative overflow-hidden rounded-2xl border-2 border-crisis/40",
-        "bg-gradient-crisis text-crisis-foreground shadow-elevated animate-float-up",
+        "relative overflow-hidden rounded-2xl border-2 border-destructive/40",
+        "bg-gradient-to-br from-destructive/10 to-destructive/5 shadow-elevated animate-float-up",
       )}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-white/15 via-transparent to-black/10" />
-
       <div className="relative p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/25 backdrop-blur">
-              <ShieldAlert className="h-5 w-5" strokeWidth={2.5} />
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-destructive/20">
+              <AlertTriangle className="h-5 w-5 text-destructive" strokeWidth={2.5} />
             </span>
             <div>
-              <h2 className="font-display text-lg font-semibold leading-tight">You don't have to face this alone</h2>
-              <p className="mt-1 text-sm leading-relaxed opacity-95">
-                Trained people are ready to listen <strong>right now</strong>, free and confidentially. Please reach
-                out — your life matters.
+              <h2 className="font-display text-lg font-semibold leading-tight text-foreground">
+                Medical Emergency Warning
+              </h2>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                If you&apos;re experiencing a medical emergency, <strong className="text-foreground">call emergency services immediately</strong>.
+                Do not wait for online guidance.
               </p>
             </div>
           </div>
           {onDismiss && (
             <button
               onClick={onDismiss}
-              aria-label="Hide crisis support panel"
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg hover:bg-white/20"
+              aria-label="Hide emergency info panel"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg hover:bg-muted"
             >
               <X className="h-4 w-4" />
             </button>
           )}
         </div>
 
-        <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-          {HELPLINES.map((h) => (
-            <li key={h.region}>
-              <a
-                href={h.href}
-                target={h.href?.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
-                className="flex items-center justify-between gap-3 rounded-xl bg-white/95 px-3 py-2.5 text-crisis-foreground shadow-soft transition-base hover:bg-white"
-              >
-                <div className="min-w-0">
-                  <p className="text-xs font-medium uppercase tracking-wide opacity-70">{h.region}</p>
-                  <p className="truncate text-sm font-semibold">{h.name}</p>
-                  {h.hours && <p className="text-xs opacity-70">{h.hours}</p>}
-                </div>
-                <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-crisis/15 px-2.5 py-1 text-sm font-bold text-crisis">
-                  {h.href?.startsWith("http") ? <ExternalLink className="h-3.5 w-3.5" /> : <Phone className="h-3.5 w-3.5" />}
-                  {h.phone}
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="mt-4">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground mb-2">
+            Emergency Numbers by Region
+          </p>
+          <ul className="grid gap-2 sm:grid-cols-3">
+            {EMERGENCY_NUMBERS.map((contact) => (
+              <li key={contact.region}>
+                <a
+                  href={contact.href}
+                  className="flex items-center justify-between gap-2 rounded-xl bg-card border border-border px-3 py-2.5 shadow-soft transition-base hover:border-destructive/40 hover:bg-destructive/5"
+                >
+                  <div className="min-w-0">
+                    <p className="text-xs text-muted-foreground">{contact.region}</p>
+                  </div>
+                  <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-destructive/10 px-2.5 py-1 text-sm font-bold text-destructive">
+                    <Phone className="h-3.5 w-3.5" />
+                    {contact.number}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        <p className="mt-4 text-xs opacity-90">
-          If you're in immediate danger, call your local emergency number now (911 in the US, 112 in EU, 999 in UK,
-          112 in India).
-        </p>
-        <div className="mt-3">
-          <Button asChild size="sm" variant="secondary" className="rounded-full bg-white text-crisis hover:bg-white/90">
-            <a href="https://findahelpline.com" target="_blank" rel="noreferrer">
-              Find a helpline in your country
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          </Button>
+        <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+          <p className="text-sm text-foreground font-medium">When to call emergency services:</p>
+          <ul className="mt-2 text-xs text-muted-foreground space-y-1">
+            <li>- Chest pain or difficulty breathing</li>
+            <li>- Signs of stroke (face drooping, arm weakness, speech difficulty)</li>
+            <li>- Severe bleeding or major injuries</li>
+            <li>- Loss of consciousness or seizures</li>
+            <li>- Severe allergic reactions</li>
+          </ul>
         </div>
       </div>
     </div>

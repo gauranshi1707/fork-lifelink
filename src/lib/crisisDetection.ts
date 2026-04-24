@@ -1,35 +1,64 @@
 /**
- * Crisis keyword & intent detection.
+ * Medical emergency symptom detection.
  * Runs entirely on the client — fast, private, no network calls.
  *
- * Regex uses word boundaries to avoid false positives like "killing it"
- * but still catches "kill myself", "i wanna die", "end it all", etc.
+ * Detects symptoms that may indicate a medical emergency requiring
+ * immediate professional care.
  */
 
-const PATTERNS: RegExp[] = [
-  /\bsuicid(e|al)\b/i,
-  /\bkill\s+(myself|me)\b/i,
-  /\bend\s+(my|it)\s+(life|all)\b/i,
-  /\b(don'?t|dont)\s+want\s+to\s+(live|be\s+alive|exist)\b/i,
-  /\bi\s+(wanna|want\s+to|want\s+a)\s+die\b/i,
-  /\b(take|taking)\s+my\s+own\s+life\b/i,
-  /\bhurt(ing)?\s+myself\b/i,
-  /\bself[-\s]?harm\b/i,
-  /\bcut(ting)?\s+myself\b/i,
+const EMERGENCY_PATTERNS: RegExp[] = [
+  // Cardiac symptoms
+  /\bchest\s+pain\b/i,
+  /\bheart\s+(attack|palpitations?)\b/i,
+  /\btightness\s+in\s+(my\s+)?chest\b/i,
+  /\bpain\s+(radiating|spreading)\s+to\s+(my\s+)?(arm|jaw|neck)\b/i,
+  
+  // Respiratory distress
+  /\b(can'?t|cannot|unable\s+to)\s+breathe\b/i,
+  /\bdifficulty\s+breathing\b/i,
+  /\bshortness\s+of\s+breath\b/i,
+  /\bchoking\b/i,
+  /\bsevere\s+asthma\b/i,
+  
+  // Neurological emergencies
+  /\bstroke\b/i,
+  /\bseizure\b/i,
+  /\bconvulsions?\b/i,
+  /\bunconscious(ness)?\b/i,
+  /\bfainted?\b/i,
+  /\bpassed\s+out\b/i,
+  /\bcan'?t\s+(move|feel)\s+(my\s+)?(arm|leg|face|side)\b/i,
+  /\bslurred\s+speech\b/i,
+  /\bsudden\s+(severe\s+)?headache\b/i,
+  /\bblurred\s+vision\b/i,
+  
+  // Severe bleeding/trauma
+  /\bsevere\s+bleeding\b/i,
+  /\bwon'?t\s+stop\s+bleeding\b/i,
+  /\bhead\s+injury\b/i,
+  /\bserious\s+(injury|accident)\b/i,
+  
+  // Allergic reactions
+  /\banaphyla(xis|ctic)\b/i,
+  /\bsevere\s+allergic\b/i,
+  /\bthroat\s+(swelling|closing)\b/i,
+  /\bcan'?t\s+swallow\b/i,
+  
+  // Other emergencies
   /\boverdose\b/i,
-  /\bjump(ing)?\s+off\b/i,
-  /\bno\s+(point|reason)\s+(in\s+)?(living|to\s+live)\b/i,
-  /\bi\s+can'?t\s+(go\s+on|do\s+this\s+anymore|take\s+it\s+anymore)\b/i,
-  /\b(better\s+off|world\s+would\s+be\s+better)\s+(without\s+me|dead)\b/i,
-  /\bi\s+want\s+to\s+(disappear|vanish)\s+(forever|for\s+good)\b/i,
+  /\bpoisoning\b/i,
+  /\bsevere\s+abdominal\s+pain\b/i,
+  /\bcoughing\s+(up\s+)?blood\b/i,
+  /\bvomiting\s+blood\b/i,
+  /\bhigh\s+fever\b/i,
 ];
 
-const URGENT_HELP = /\b(help|emergency|in\s+danger|being\s+(hurt|attacked|abused))\b/i;
+const URGENT_CONTEXT = /\b(emergency|urgent|severe|extreme|intense|unbearable|worst)\b/i;
 
 export function detectCrisis(text: string): boolean {
   if (!text) return false;
-  if (PATTERNS.some((re) => re.test(text))) return true;
-  // "help me" alone is too noisy; require a strong context
-  if (URGENT_HELP.test(text) && /\b(now|please|now!|right\s+now)\b/i.test(text)) return true;
+  if (EMERGENCY_PATTERNS.some((re) => re.test(text))) return true;
+  // Generic urgent words with pain context
+  if (URGENT_CONTEXT.test(text) && /\bpain\b/i.test(text)) return true;
   return false;
 }
