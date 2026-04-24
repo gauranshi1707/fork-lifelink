@@ -250,6 +250,7 @@ export type Database = {
           emergency_contact_phone: string | null
           id: string
           phone: string | null
+          referral_code: string
           updated_at: string
           user_id: string
         }
@@ -262,6 +263,7 @@ export type Database = {
           emergency_contact_phone?: string | null
           id?: string
           phone?: string | null
+          referral_code?: string
           updated_at?: string
           user_id: string
         }
@@ -274,8 +276,39 @@ export type Database = {
           emergency_contact_phone?: string | null
           id?: string
           phone?: string | null
+          referral_code?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          joined_at: string
+          referred_user_id: string
+          referrer_id: string
+          status: Database["public"]["Enums"]["referral_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          joined_at?: string
+          referred_user_id: string
+          referrer_id: string
+          status?: Database["public"]["Enums"]["referral_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          joined_at?: string
+          referred_user_id?: string
+          referrer_id?: string
+          status?: Database["public"]["Enums"]["referral_status"]
+          updated_at?: string
         }
         Relationships: []
       }
@@ -344,6 +377,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_referral: { Args: { _code: string }; Returns: string }
       donors_within_radius: {
         Args: {
           _blood_group: Database["public"]["Enums"]["blood_group"]
@@ -363,6 +397,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      generate_referral_code: { Args: never; Returns: string }
       get_accepted_donor_contact: {
         Args: { _request_id: string }
         Returns: {
@@ -396,6 +431,7 @@ export type Database = {
       blood_group: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-"
       contact_request_status: "pending" | "accepted" | "declined" | "cancelled"
       dose_status: "pending" | "taken" | "skipped" | "missed"
+      referral_status: "pending" | "completed"
       request_status: "open" | "fulfilled" | "cancelled"
       urgency_level: "low" | "normal" | "high" | "critical"
       vault_category:
@@ -535,6 +571,7 @@ export const Constants = {
       blood_group: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
       contact_request_status: ["pending", "accepted", "declined", "cancelled"],
       dose_status: ["pending", "taken", "skipped", "missed"],
+      referral_status: ["pending", "completed"],
       request_status: ["open", "fulfilled", "cancelled"],
       urgency_level: ["low", "normal", "high", "critical"],
       vault_category: [

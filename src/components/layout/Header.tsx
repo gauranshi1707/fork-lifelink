@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Heart, Menu, X, MessageCircleHeart, Pill, Droplet, Siren, ShieldCheck, UserRound, LogOut } from "lucide-react";
+import { Heart, Menu, X, MessageCircleHeart, Pill, Droplet, Siren, ShieldCheck, UserRound, LogOut, Gift } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -93,6 +93,11 @@ export const Header = () => {
                   <div className="text-sm font-medium">{user.user_metadata?.display_name || "Signed in"}</div>
                   <div className="text-xs text-muted-foreground">{user.email}</div>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/invite")}>
+                  <Gift className="mr-2 h-4 w-4" />
+                  Invite & Earn
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut} className="text-destructive focus:text-destructive">
                   <LogOut className="mr-2 h-4 w-4" />
